@@ -1,6 +1,5 @@
 # LaTeX 编译生成的文件
 *.aux
-*.bbl
 *.blg
 *.brf
 *.idx
@@ -35,3 +34,5 @@
 # 目录
 _build/
 output/
+main.bbl
+main.xdv
