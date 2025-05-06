@@ -1,0 +1,14 @@
+总平均加速比:
+  相对于 DGL: 1.10x
+  相对于 PyG: 2.53x
+
+各类别的平均加速比:
+  Type I:
+    相对于 DGL: 1.34x
+    相对于 PyG: 2.49x
+  Type II:
+    相对于 DGL: 1.03x
+    相对于 PyG: 1.71x
+  Type III:
+    相对于 DGL: 1.00x
+    相对于 PyG: 3.54x

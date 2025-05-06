@@ -1,0 +1,16 @@
+图表已成功保存为 'gcn_train_compare.pdf'
+
+总平均加速比:
+  相对于 DGL: 2.53x
+  相对于 PyG: 1.86x
+
+各类别的平均加速比:
+  Type I:
+    相对于 DGL: 5.02x
+    相对于 PyG: 2.98x
+  Type II:
+    相对于 DGL: 1.83x
+    相对于 PyG: 1.20x
+  Type III:
+    相对于 DGL: 1.39x
+    相对于 PyG: 1.75x

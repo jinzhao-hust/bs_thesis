@@ -1,0 +1,278 @@
+GIN
+train
+DGL
+dataset,Avg.Epoch (ms)
+citeseer, 4.185
+cora, 4.119
+pubmed, 4.067
+ppi, 9.129
+PROTEINS_full, 4.527
+OVCAR-8H, 249.974
+Yeast, 226.239
+DD, 45.640
+TWITTER-Real-Graph-Partial, 1814.117
+SW-620H, 249.261
+amazon0505, 75.067
+artist, 8.663
+com-amazon, 57.716
+soc-BlogCatalog, 16.555
+amazon0601, 71.952
+GNNA
+dataset,Avg.Epoch (ms)
+citeseer, 6.989
+cora, 1.574
+pubmed, 3.852
+ppi, 8.453
+PROTEINS_full, 3.808
+OVCAR-8H, 227.689
+Yeast, 202.428
+DD, 41.282
+TWITTER-Real-Graph-Partial, 3174.772
+SW-620H, 222.712
+amazon0505, 73.086
+artist, 10.724
+com-amazon, 53.590
+soc-BlogCatalog, 15.456
+amazon0601, 69.665
+PyG
+dataset,Avg.Epoch (ms)
+citeseer, 7.039
+cora, 4.714
+pubmed, 9.767
+ppi, 28.924
+PROTEINS_full, 9.205
+OVCAR-8H, 332.915
+Yeast, 304.087
+DD, 85.056
+TWITTER-Real-Graph-Partial, 4246.857
+SW-620H, 333.767
+amazon0505, 213.029
+artist, 53.787
+com-amazon, 109.924
+soc-BlogCatalog, 70.731
+amazon0601, 217.197
+infer
+DGL
+dataset,Avg.Epoch (ms)
+citeseer, 3.281
+cora, 2.074
+pubmed, 3.456
+ppi, 3.917
+PROTEINS_full, 2.461
+OVCAR-8H, 120.521
+Yeast, 109.565
+DD, 23.505
+TWITTER-Real-Graph-Partial, 1094.324
+SW-620H, 118.372
+amazon0505, 37.313
+artist, 4.758
+com-amazon, 28.548
+soc-BlogCatalog, 10.202
+amazon0601, 36.411
+GNNA
+dataset,Avg.Epoch (ms)
+citeseer, 3.857
+cora, 0.792
+pubmed, 1.909
+ppi, 3.226
+PROTEINS_full, 1.261
+OVCAR-8H, 93.741
+Yeast, 82.862
+DD, 17.883
+TWITTER-Real-Graph-Partial, 1938.564
+SW-620H, 92.231
+amazon0505, 31.348
+artist, 5.158
+com-amazon, 22.744
+soc-BlogCatalog, 7.155
+amazon0601, 29.554
+PyG
+dataset,Avg.Epoch (ms)
+citeseer, 4.929
+cora, 2.203
+pubmed, 6.434
+ppi, 15.679
+PROTEINS_full, 4.745
+OVCAR-8H, 167.976
+Yeast, 156.560
+DD, 48.743
+TWITTER-Real-Graph-Partial, 3178.243
+SW-620H, 167.886
+amazon0505, 131.757
+artist, 33.293
+com-amazon, 65.444
+soc-BlogCatalog, 43.927
+amazon0601, 132.438
+GCN
+train
+DGL
+dataset,Avg.Epoch (ms)
+citeseer, 6.594
+cora, 6.808
+pubmed, 5.868
+ppi, 9.467
+PROTEINS_full, 7.776
+OVCAR-8H, 70.469
+Yeast, 62.820
+DD, 15.639
+TWITTER-Real-Graph-Partial, 68.199
+SW-620H, 70.487
+amazon0505, 28.095
+artist, 7.221
+com-amazon, 22.368
+soc-BlogCatalog, 9.780
+amazon0601, 28.381
+GNNA
+dataset,Avg.Epoch (ms)
+citeseer, 1.006
+cora, 0.898
+pubmed, 1.356
+ppi, 5.926
+PROTEINS_full, 1.456
+OVCAR-8H, 71.121
+Yeast, 61.244
+DD, 11.780
+TWITTER-Real-Graph-Partial, 53.231
+SW-620H, 70.500
+amazon0505, 26.446
+artist, 3.606
+com-amazon, 18.843
+soc-BlogCatalog, 6.066
+amazon0601, 25.800
+PyG
+dataset,Avg.Epoch (ms)
+citeseer, 3.337
+cora, 3.149
+pubmed, 3.370
+ppi, 15.378
+PROTEINS_full, 3.728
+OVCAR-8H, 66.744
+Yeast, 58.435
+DD, 12.355
+TWITTER-Real-Graph-Partial, 39.642
+SW-620H, 66.593
+amazon0505, 37.520
+artist, 7.845
+com-amazon, 22.501
+soc-BlogCatalog, 15.122
+amazon0601, 38.234
+infer
+DGL
+dataset,Avg.Epoch (ms)
+citeseer, 3.169
+cora, 2.549
+pubmed, 2.670
+ppi, 3.402
+PROTEINS_full, 2.903
+OVCAR-8H, 17.597
+Yeast, 17.060
+DD, 5.406
+TWITTER-Real-Graph-Partial, 45.580
+SW-620H, 17.597
+amazon0505, 9.120
+artist, 3.063
+com-amazon, 6.708
+soc-BlogCatalog, 4.549
+amazon0601, 9.597
+GNNA
+dataset,Avg.Epoch (ms)
+citeseer, 0.385
+cora, 0.256
+pubmed, 0.472
+ppi, 2.499
+PROTEINS_full, 0.468
+OVCAR-8H, 15.193
+Yeast, 13.392
+DD, 3.071
+TWITTER-Real-Graph-Partial, 17.346
+SW-620H, 15.293
+amazon0505, 7.557
+artist, 1.598
+com-amazon, 4.954
+soc-BlogCatalog, 2.462
+amazon0601, 7.289
+PyG
+dataset,Avg.Epoch (ms)
+citeseer, 1.270
+cora, 1.238
+pubmed, 1.305
+ppi, 7.359
+PROTEINS_full, 1.203
+OVCAR-8H, 12.011
+Yeast, 11.430
+DD, 3.875
+TWITTER-Real-Graph-Partial, 17.577
+SW-620H, 12.386
+amazon0505, 14.382
+artist, 3.503
+com-amazon, 7.589
+soc-BlogCatalog, 7.447
+amazon0601, 15.566
+
+总体加速比
+图表已成功保存为 'gcn_infer_compare.pdf'
+
+总平均加速比:
+  相对于 DGL: 3.13x
+  相对于 PyG: 2.13x
+
+各类别的平均加速比:
+  Type I:
+    相对于 DGL: 6.30x
+    相对于 PyG: 3.46x
+  Type II:
+    相对于 DGL: 2.36x
+    相对于 PyG: 1.22x
+  Type III:
+    相对于 DGL: 1.53x
+    相对于 PyG: 2.16x
+
+图表已成功保存为 'gcn_train_compare.pdf'
+
+总平均加速比:
+  相对于 DGL: 2.53x
+  相对于 PyG: 1.86x
+
+各类别的平均加速比:
+  Type I:
+    相对于 DGL: 5.02x
+    相对于 PyG: 2.98x
+  Type II:
+    相对于 DGL: 1.83x
+    相对于 PyG: 1.20x
+  Type III:
+    相对于 DGL: 1.39x
+    相对于 PyG: 1.75x
+
+    图表已成功保存为 'gin_infer_compare.pdf'
+
+总平均加速比:
+  相对于 DGL: 1.35x
+  相对于 PyG: 3.34x
+
+各类别的平均加速比:
+  Type I:
+    相对于 DGL: 1.62x
+    相对于 PyG: 3.07x
+  Type II:
+    相对于 DGL: 1.29x
+    相对于 PyG: 2.27x
+  Type III:
+    相对于 DGL: 1.21x
+    相对于 PyG: 4.83x
+
+
+    总平均加速比:
+  相对于 DGL: 1.10x
+  相对于 PyG: 2.53x
+
+各类别的平均加速比:
+  Type I:
+    相对于 DGL: 1.34x
+    相对于 PyG: 2.49x
+  Type II:
+    相对于 DGL: 1.03x
+    相对于 PyG: 1.71x
+  Type III:
+    相对于 DGL: 1.00x
+    相对于 PyG: 3.54x

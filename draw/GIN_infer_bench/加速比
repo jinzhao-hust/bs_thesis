@@ -1,0 +1,16 @@
+图表已成功保存为 'gin_infer_compare.pdf'
+
+总平均加速比:
+  相对于 DGL: 1.35x
+  相对于 PyG: 3.34x
+
+各类别的平均加速比:
+  Type I:
+    相对于 DGL: 1.62x
+    相对于 PyG: 3.07x
+  Type II:
+    相对于 DGL: 1.29x
+    相对于 PyG: 2.27x
+  Type III:
+    相对于 DGL: 1.21x
+    相对于 PyG: 4.83x
