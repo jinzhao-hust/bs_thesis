@@ -1,0 +1,28 @@
+各数据集加速比：
+citeseer: GCN=6.55×, GIN=0.60×
+cora: GCN=7.58×, GIN=2.62×
+pubmed: GCN=4.33×, GIN=1.06×
+ppi: GCN=1.60×, GIN=1.08×
+proteins_full: GCN=5.34×, GIN=1.19×
+ovcar-8h: GCN=0.99×, GIN=1.10×
+yeast: GCN=1.03×, GIN=1.12×
+dd: GCN=1.33×, GIN=1.11×
+twitter-real-graph-partial: GCN=1.28×, GIN=0.57×
+sw-620h: GCN=1.00×, GIN=1.12×
+amazon0505: GCN=1.06×, GIN=1.03×
+artist: GCN=2.00×, GIN=0.81×
+com-amazon: GCN=1.19×, GIN=1.08×
+soc-blogcatalog: GCN=1.61×, GIN=1.07×
+amazon0601: GCN=1.10×, GIN=1.03×
+
+平均加速比：
+GCN 总平均：2.53×
+GIN 总平均：1.10×
+
+GCN Type I 平均：5.02×
+GCN Type II 平均：1.84×
+GCN Type III 平均：1.39×
+
+GIN Type I 平均：1.34×
+GIN Type II 平均：1.02×
+GIN Type III 平均：1.00×

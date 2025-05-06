@@ -1,15 +1,21 @@
 \abstracten
 
-英文摘要在中文摘要定稿后再开始撰写，否则会多次修改，不要过于依赖百度翻译等工具。
-英文单词不能出现换行断开问题，
+As the emerging trend of graph-based deep learning, Graph Neural Networks (GNNs) excel for their capability to generate high-quality node feature vectors (embeddings).
+%
+However, the existing one-size-fits-all GNN implementations are insufficient to catch up with the evolving GNN architectures, the ever-increasing graph sizes, and the diverse node embedding dimensionalities.
+%thus, suffering from an unsatisfied performance.
+%\yuke{However, existing GNN implementations are insufficient to handle ever-changing GNN architectures, graph structure, and node feature vector (embedding) dimensionality, thus, suffering from an unsatisfied performance.}
+%
+To this end, we propose \textbf{~\Mname{}}, an adaptive and efficient runtime system to accelerate various GNN workloads on GPU platforms. 
+%
+First, GNNAdvisor explores and identifies several performance-relevant features from both the GNN model and the input graph, and uses them as a new driving force for GNN acceleration. 
+%
+Second, GNNAdvisor implements a novel and highly-efficient 2D workload management, tailored for GNN computation to improve GPU utilization and performance under different application settings.
+%
+Third, GNNAdvisor capitalizes on the GPU memory hierarchy for acceleration by gracefully coordinating the execution of GNNs according to the characteristics of the GPU memory structure and GNN workloads.
+%
+Furthermore, to enable automatic runtime optimization, GNNAdvisor incorporates a lightweight analytical model for an effective design parameter search.
+%
+Extensive experiments show that GNNAdvisor outperforms the state-of-the-art GNN computing frameworks, such as Deep Graph Library ($2.24\times$ faster on average) and Python Geometric ($2.83\times$ faster on average), on mainstream GNN architectures across various datasets.
 
-Keywords对照中文关键词翻译，与英文摘要在同一页，以“Keywords：”顶左开始。
-Keywords之间用“,”隔开，最后一个Keyword后不用加任何标点符号。  
-多个单词中各单词首字母大些，虚词除外，关键词和正文之间空一行
-
-one two three four five, fight the tiger on the mountain
-
-\vspace{5pt}
-
-
-\keywordsen Gougu Formula, function, Reimu
+\keywordsen Graph Neural Networks, GPU acceleration, Workload management, Memory hierarchy

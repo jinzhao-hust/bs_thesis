@@ -1,0 +1,118 @@
+(latex) jinzhao@LAPTOP-2O9195G7:~/latex/template-of-thesis/draw/PyG_infer_cmp$ python3 draw.py
+各数据集加速比：
+citeseer: GCN=3.30×, GIN=1.28×
+cora: GCN=4.84×, GIN=2.78×
+pubmed: GCN=2.76×, GIN=3.37×
+ppi: GCN=2.94×, GIN=4.86×
+proteins_full: GCN=2.57×, GIN=3.76×
+ovcar-8h: GCN=0.79×, GIN=1.79×
+yeast: GCN=0.85×, GIN=1.89×
+dd: GCN=1.26×, GIN=2.73×
+twitter-real-graph-partial: GCN=1.01×, GIN=1.64×
+sw-620h: GCN=0.81×, GIN=1.82×
+amazon0505: GCN=1.90×, GIN=4.20×
+artist: GCN=2.19×, GIN=6.45×
+com-amazon: GCN=1.53×, GIN=2.88×
+soc-blogcatalog: GCN=3.02×, GIN=6.14×
+amazon0601: GCN=2.14×, GIN=4.48×
+
+平均加速比：
+GCN 总平均：2.13×
+GIN 总平均：3.34×
+
+GCN Type I 平均：3.46×
+GCN Type II 平均：1.40×
+GCN Type III 平均：2.16×
+
+GIN Type I 平均：3.07×
+GIN Type II 平均：2.67×
+GIN Type III 平均：4.83×
+
+(latex) jinzhao@LAPTOP-2O9195G7:~/latex/template-of-thesis/draw/dgl_infer_cmp$ python3 draw.py
+各数据集加速比：
+citeseer: GCN=8.23×, GIN=0.85×
+cora: GCN=9.96×, GIN=2.62×
+pubmed: GCN=5.66×, GIN=1.81×
+ppi: GCN=1.36×, GIN=1.21×
+proteins_full: GCN=6.20×, GIN=1.95×
+ovcar-8h: GCN=1.16×, GIN=1.29×
+yeast: GCN=1.27×, GIN=1.32×
+dd: GCN=1.76×, GIN=1.31×
+twitter-real-graph-partial: GCN=2.63×, GIN=0.56×
+sw-620h: GCN=1.15×, GIN=1.28×
+amazon0505: GCN=1.21×, GIN=1.19×
+artist: GCN=1.92×, GIN=0.92×
+com-amazon: GCN=1.35×, GIN=1.26×
+soc-blogcatalog: GCN=1.85×, GIN=1.43×
+amazon0601: GCN=1.32×, GIN=1.23×
+
+平均加速比：
+GCN 总平均：3.13×
+GIN 总平均：1.35×
+
+GCN Type I 平均：6.30×
+GCN Type II 平均：2.37×
+GCN Type III 平均：1.53×
+
+GIN Type I 平均：1.62×
+GIN Type II 平均：1.27×
+GIN Type III 平均：1.21×
+(latex) jinzhao@LAPTOP-2O9195G7:~/latex/template-of-thesis/draw/dgl_infer_cmp$ python3 draw.py
+各数据集加速比：
+citeseer: GCN=8.23×, GIN=0.85×
+cora: GCN=9.96×, GIN=2.62×
+pubmed: GCN=5.66×, GIN=1.81×
+ppi: GCN=1.36×, GIN=1.21×
+proteins_full: GCN=6.20×, GIN=1.95×
+ovcar-8h: GCN=1.16×, GIN=1.29×
+yeast: GCN=1.27×, GIN=1.32×
+dd: GCN=1.76×, GIN=1.31×
+twitter-real-graph-partial: GCN=2.63×, GIN=0.56×
+sw-620h: GCN=1.15×, GIN=1.28×
+amazon0505: GCN=1.21×, GIN=1.19×
+artist: GCN=1.92×, GIN=0.92×
+com-amazon: GCN=1.35×, GIN=1.26×
+soc-blogcatalog: GCN=1.85×, GIN=1.43×
+amazon0601: GCN=1.32×, GIN=1.23×
+
+平均加速比：
+GCN 总平均：3.13×
+GIN 总平均：1.35×
+
+GCN Type I 平均：6.30×
+GCN Type II 平均：2.37×
+GCN Type III 平均：1.53×
+
+GIN Type I 平均：1.62×
+GIN Type II 平均：1.27×
+GIN Type III 平均：1.21×
+
+(latex) jinzhao@LAPTOP-2O9195G7:~/latex/template-of-thesis/draw/PyG_train_cmp$ python3 draw.py 
+各数据集加速比：
+citeseer: GCN=3.32×, GIN=1.01×
+cora: GCN=3.51×, GIN=2.99×
+pubmed: GCN=2.49×, GIN=2.54×
+ppi: GCN=2.60×, GIN=3.42×
+proteins_full: GCN=2.56×, GIN=2.42×
+ovcar-8h: GCN=0.94×, GIN=1.46×
+yeast: GCN=0.95×, GIN=1.50×
+dd: GCN=1.05×, GIN=2.06×
+twitter-real-graph-partial: GCN=0.74×, GIN=1.34×
+sw-620h: GCN=0.94×, GIN=1.50×
+amazon0505: GCN=1.42×, GIN=2.91×
+artist: GCN=2.18×, GIN=5.02×
+com-amazon: GCN=1.19×, GIN=2.05×
+soc-blogcatalog: GCN=2.49×, GIN=4.58×
+amazon0601: GCN=1.48×, GIN=3.12×
+
+平均加速比：
+GCN 总平均：1.86×
+GIN 总平均：2.53×
+
+GCN Type I 平均：2.98×
+GCN Type II 平均：1.28×
+GCN Type III 平均：1.75×
+
+GIN Type I 平均：2.49×
+GIN Type II 平均：1.95×
+GIN Type III 平均：3.54×

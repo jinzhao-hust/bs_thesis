@@ -22,7 +22,7 @@ GIN 与 GCN 的不同之处在于其聚合函数，该函数对节点自身的�
 \underline{II 型图}~\cite{KKMMN2016} 是图核 (graph kernels) 的流行基准数据集，并被选为 PyG~\cite{pyG} 的内置数据集。每个数据集包含一组小图，这些小图仅有图内边连接，没有图间边连接。
 % These graphs are generally used for batched training or inference.
 % % 这些图通常用于批量训练或推理。
-\underline{III 型图} ~\cite{snapnets, GCNConv} 在节点和边的数量上都很大。这些图表现出高度的结构不规则性，这对大多数现有的 GNN 框架来说都具有挑战性。这些数据集的详细信息列于表~\ref{table: Evaluation Dataset}。
+\underline{III 型图} ~\cite{snapnets, GCNConv} 在节点和边的数量都很大。这些图表现出高度的结构不规则性，这对大多数现有的 GNN 框架来说都具有挑战性。这些数据集的详细信息列于表~\ref{table: Evaluation Dataset}。
  % Note that $\#Class$ is used for node classification task.
 其中，\textbf{\#类型}于节点分类任务。
 \begin{table}[htbp] 
@@ -67,219 +67,155 @@ GIN 与 GCN 的不同之处在于其聚合函数，该函数对节点自身的�
 
 \textbf{平台与指标 (Platforms \& Metrics): }
 \label{sect: Platforms and Metrics }
-我们使用 CUDA 12.4 和 PyTorch 2.4.0 作为编程平台,基于 C++ 和 CUDA 实现了 ~\Mname{} 的后端，并通过 Python 绑定 PyTorch 前端。评估平台采用了一台配备 16 核心、32 线程的 AMD Ryzen 9 7945HX 处理器和 NVIDIA RTX 4060 GPU 的笔记本电脑，运行环境为 WSL2 下的 Ubuntu 24.04。在性能评估过程中，为了量化加速效果，我们通过计算 200 次端到端推理（前向传播）或训练（前向加反向传播）的平均延迟来衡量性能提升。
-\subsection{性能评估}
-在本节中，我们将详细展示~\Mname{}在GCN和GIN模型上的性能表现，并与DGL和PyG进行比较，涵盖训练和推理两个阶段。
-\subsubsection{基于GCN的性能评估}
-~\Mname{}在 GCN 上表现出色，在三种类型数据集上的训练和推理都实现了显著的加速效果。相比于 DGL， ~\Mname{}平均实现了$2.53 \times $的训练加速比和$3.13\times$的推理加速比；相比于PyG,~\Mname{}平均实现了$1.86\times$的训练加速比和$2.13\times$的推理加速比。接下来我们将详细分析~\Mname{}在 GCN 上的性能表现，并为每种数据集提供分析。
+我们使用 CUDA 12.4 和 PyTorch 2.4.0 作为编程平台,基于 C++ 和 CUDA 实现了 ~\Mname{} 的后端，并通过 Python 绑定 PyTorch 前端。评估平台采用了一台配备 16 核心、32 线程的 AMD Ryzen 9 7945HX 处理器和 NVIDIA RTX 4060 GPU 的笔记本电脑，运行环境为 WSL2 下的 Ubuntu 24.04。在性能评估过程中，为了量化加速效果，我们通过计算 200 次端到端推理（前向传播）和训练（前向传播和反向传播）的平均延迟（不包括i数据预处理和加载时间）来衡量性能提升。
 \begin{figure}[htbp] 
     \centering
-    \includegraphics[width=\linewidth]{images/gcn_train_compare.pdf} 
-    \caption{train speedup ($\times$) over DGL on GCN and GIN.}
-    \label{fig: train-speedup-on-gcn}
-    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离
+    \includegraphics[width=0.9\linewidth]{images/dgl_infer_cmp.pdf} 
+    \caption{~\Mname{} 在 GCN 和 GIN 上相较于 DGL 的推理加速比 ($\times$)。}
+    \label{fig: Speedup vs DGL inference}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
+    \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
+\end{figure}
+\subsection{性能评估}
+在本节中，我们首先对比分析了~\Mname{}与 DGL 在图神经网络（GNN）推理任务中的性能差异，随后将对比扩展至训练任务。
+如图~\ref{fig: Speedup vs DGL inference} 所示，~\Mname{}在 GCN 和 GIN 两类模型的推理任务中，分别在三类数据集上相较于 DGL~\cite{wang2019dgl} 平均加速达到了$3.13\times$ 和 、$1.35\times$。尤其是在挑战性较高的第三类图上，~\Mname{}对于 GCN 和 GIN 的平均加速分别为$1.53\times$ 和$1.12\times$。 这得益于~\Mname{}充分挖掘输入图的结构信息（如节点度数）用于指导系统优化。具体而言，我们基于节点分组策略进行工作负载划分，从而提升了 GPU 利用率。我们接下来将针对三类图数据展开具体分析，并探讨其中的性能优化机理。
+
+\textbf{I 型图:}
+对于该类图，GCN 相比 DGL 的加速效果明显优于 GIN，平均分别为$6.30\times$ 与$1.35\times$。
+两者差异主要源自其各自的计算流程：GCN 在聚合操作之前进行节点特征降维（即 DGEMM 操作），显著减少了聚合阶段的数据移动和线程同步开销。这种结构非常契合 \Mname 所提出的二维任务划分机制和面向局部性的内存优化策略，能充分发挥 GPU 的数据局部性优势。
+而 GIN 的计算顺序则相反，必须先执行聚合操作再进行节点特征变换，因此无法避免高频次的全局内存访问和数据传输，限制了数据局部性和共享内存的优势发挥。
+尽管如此，我们提出的细粒度维度划分策略依然能够较好地处理高维特征场景，保障整体性能。
+
+\textbf{II 型图:}
+在这类图上，~\Mname{}依然取得了较为显著的性能提升，在 GCN 和 GIN 上平均加速比分别为$2.37\times$ 与$1.27\times$，但在 \textit{TWITTER-Partial} 数据集上差距略大，尤其是在 GIN 上，效果逊色于 DGL。该数据集的节点特征维度高达 1323，是此类图中最高的。而GIN 必须先在1323 维节点嵌入上执行邻居聚合，再进行线性变换降维。这导致了大量的全局内存访问和线程间同步开销，限制了性能提升。相比之下，GCN 先进行线性变换降维，再执行邻居聚合，因此在该数据集上仍然能够获得较好的加速效果。
+
+\textbf{III 型图:}
+这些图在节点和边的数量上都很大，表现出高度的结构不规则性，极具挑战性，但是~\Mname{}依然取得了一定效果。例如\textit{soc-BlogCatalog}，~\Mname{} 对 GCN 和 GIN 的平均加速比分别达到$1.85\times$ 与$1.43\times$。这类图通常存在较高的线程间同步和全局内存访问开销，而我们提出的二维任务划分与内存优化机制可有效缓解这一瓶颈。此外，我们基于社区结构的信息进行的节点重新编号，进一步提升了线程之间在局部节点处理中的数据共享效率，从而提高了空间与时间局部性。但在 \textit{artist} 数据集上，GIN 的加速效果相对较低。分析发现，该数据集社区划分的标准差最高，社区结构分布极不均衡，导致我们难以充分利用社区信息在 GNN 聚合阶段捕捉局部性，也限制了线程映射对齐、共享内存调度等系统优化策略的实施效果。
+\begin{figure}[htbp] 
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/dgl_train_cmp.pdf} 
+    \caption{~\Mname{} 在 GCN 和 GIN 上相较于 DGL 的训练加速比 ($\times$)。}
+    \label{fig: Speedup vs DGL Training}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
     \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
 \end{figure}
 
-\textbf{I 型图:}
-~\Mname{}在I型图上实现了最好的加速效果，相比于 DGL 取得了 $5.02\times$的训练加速比和$6.30\times$的推理加速比；相比于PyG取得了 $2.98\times$的训练加速比和$3.46\times$的推理加速比，在三种数据集中排第一位。I 型图的节点和边数量通常较小，但节点嵌入信息丰富且维度较高。~\Mname{}的按照维度划分工作线程的负载映射机制很好对此提供了很好的优化。
+\textbf{训练性能评估：}
+我们进一步评估了 ~\Mname{} 在 GCN 和 GIN 模型上的训练性能，并与 DGL 进行了对比。
+相比推理，训练过程更加复杂，涉及前向传播与反向传播两个阶段，二者均严重依赖底层图聚合计算的性能。如图~\ref{fig: Speedup vs DGL Training}所示，~\Mname{} 在 GCN 和 GIN 上的平均训练加速比分别为$1.61\times$ 和$2.00\times$，验证了我们基于输入特性优化策略的普适性与有效性。训练与推理的主要差异体现在两个方面：首先，训练过程中需要执行反向传播，这一阶段与推理中的前向计算类似，因此仍能从我们提出的优化中获益；其次，训练中需额外存储前向过程中的中间结果，直到反向传播使用，这会引入额外的数据访问与内存占用开销。因此，训练阶段的整体加速比相对推理阶段略低，这是由其本质的资源需求所决定的。
+\begin{figure}[htbp] 
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/pyg_infer_cmp.pdf} 
+    \caption{~\Mname{} 在 GCN 和 GIN 上相较于 PyG 的推理加速比 ($\times$)。}
+    \label{fig: Speedup vs PyG inference}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
+    \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
+\end{figure}
+\subsubsection{和PyG的比较}
+相比于 PyG，\Mname{} 展现出显著的性能优势。在 GCN 和 GIN 模型上，\Mname{} 的训练速度分别提升了 $2.13\times$ 和 $3.34\times$，推理速度则提升了 $3.13\times$ 和 $1.35\times$。其中，在 I 型图与 III 型图数据集上表现尤为突出，具体原因已在与 DGL 的对比分析中详细探讨，此处不再赘述。以下重点分析 ~\Mname{} 在 II 型图上的表现差异。
 
-\textbf{II 型图:}
-在此类数据集中，除了\textit{PROTEINS_full}外，~\Mname{}的性能要逊色于I型图。从训练的加速表现来看，加速比最高不超过$1.5\times$，在部分数据集上，表现不如PyG相对于 DGL 仅取得十分微弱的优势（$1.02\times$）；从推理的加速表现来看，相对于DGL取得了一定优势，平均推理加速比$2.36\times$，但是相比于PyG，推理加速效果较差，多个数据集中性能不及PyG。这是因为 II 型图的每个数据集包含一组小图，这些小图仅有图内边连接，没有图间边连接。PyG针对此类具有分块对角化邻接矩阵特性的批处理图数据优化最为全面（例如小批量处理机制），能够高效处理此类图结构数据。
+在 II 型图数据集上，~\Mname{} 的性能优势不明显，甚至在某些情况下表现不佳。以 GCN 为例，除 \textit{Proteins\_full} 数据集外，其余数据集的平均训练加速比$0.92\times$，平均推理加速比$0.94\times$，未能超过 PyG。这是因为PyG针对此类具有分块对角化邻接矩阵特性的批处理图数据优化最为全面（例如小批量处理机制），能够高效处理此类图结构数据。相比之下，~\Mname{} 仍然沿用了以节点度为基础的任务划分策略，在图规模较小、结构较为稠密的 II 型图中未能充分利用硬件资源，导致性能受限。
 
-\textbf{III 型图:}
-
-
-
-
-
-
-\subsubsection{基于GIN的性能评估} 
-
-
-
-
+值得注意的是，在 GIN 模型上，\Mname{} 即便在 II 型图上仍取得了良好效果，实现了 $1.95\times$ 的训练加速和 $2.67\times$ 的推理加速。这主要归因于 GIN 所引入的线性变换操作在特征聚合阶段引入了更重的计算负载，~\Mname{} 的维度工作线程划分策略和线程束级线程对齐策略能够更好地适应这一计算模式，充分利用 GPU 的计算资源和内存带宽，从而实现了更高的性能提升。
+\begin{figure}[htbp] 
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/pyg_train_cmp.pdf} 
+    \caption{~\Mname{} 在 GCN 和 GIN 上相较于 PyG 的训练加速比 ($\times$)。}
+    \label{fig: Speedup vs PyG Training}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
+    \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
+\end{figure}
 \subsection{优化分析}
-在这一节中，我们详细分析了~\ref{sect: design}中设计的优化策略。
-\subsection{附加研究}
+在这一节中，我们详细分析了第三章中设计的优化策略。
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/group-size-study.pdf}
+        \caption{邻居分区大小对运行时间的影响}
+        \label{fig:group-size-study}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dimension-worker-1.pdf}
+        \caption{维度工作线程数对运行时间的影响}
+        \label{fig:dimension-worker}
+    \end{subfigure}
+    \caption{隐藏维度与延迟的关系}
+    \label{fig:关于邻居分区和维度分区的研究}
+\end{figure}
+\subsubsection{邻居分区}
+从图~\ref{fig:group-size-study}可以看出，邻居分区策略在优化线程并行效率方面起到了关键作用。随着邻居组大小的增加，~\Mname{}的运行时间最初呈下降趋势。这是因为更大的邻居组可以让每个线程处理更多的邻接节点，从而提高线程的计算饱和度，减少线程间的竞争与同步（如原子操作），同时提升缓存命中率，改善数据访问局部性。然而，当邻居组大小超过某个临界值（例如在 artist 数据集中为 32）后，线程的并行计算能力已达到上限，继续扩大邻居组会导致工作负载不均衡、部分线程空闲或等待，从而引发新的瓶颈，反而会增加总体运行延迟。
+\subsubsection{维度分区}
+如图~\ref{fig:dimension-worker} 所示，维度分区策略通过将节点嵌入特征向量的维度划分给不同线程来实现并行计算。当维度工作线程数量从 1 增加到 16 时，可以显著提升并行度和吞吐量，因为原本顺序执行的维度计算被拆分并发执行，显著缩短了关键路径。但进一步增加线程数量至 32 时，性能提升变得不明显。这是因为此时线程之间的并行性已基本饱和，系统资源（如寄存器、共享内存）竞争加剧，导致额外线程无法有效提升整体性能，还会引入额外的引入调度和同步开销。
+\subsubsection{社区感知节点重编号}
+我们通过对 GCN 和 GIN 在 III 型数据集上的分析，展示了节点重新编号的好处。如图~\ref{fig:reorder-speedup}所示，重新编号节点可以使 GCN 和 GIN 分别加速 1.14 倍和 1.09 倍。主要原因是我们的社区感知节点重新编号可以在 GNN 聚合过程中提高数据的空间和时间局部性。
 
+为了量化这种局部性优势，我们提取了详细的 GPU 内核指标——DRAM内存读写字节数。CUDA 内核指标分析结果表明，节点重编号可以有效提升（GCN 平均减少 12.4\%，GIN 平均减少 9.3\%），因为重排序后提升了图的局部性，具有连续 ID 的节点更有可能共享已加载的节点嵌入。
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/reorder_speedup.pdf}
+        \caption{III 型图节点重编号前后的加速比}
+        \label{fig:reorder-speedup}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/reorder_overhead.pdf}
+        \caption{III 型图节点重编号的开销}
+        \label{fig:reorder-overhead}
+    \end{subfigure}
+    \caption{节点重编号的加速比和开销}
+    \label{fig:reorder}
+\end{figure}
+
+
+\subsection{额外研究}
+~\label{sect: Additional Studies}
+在这一节中，我们将对 GNN 的隐藏维度、~\Mname{} 预处理开销和\textbf{Decider}的参数选择等问题进行探讨。
+\subsubsection{GNN的隐藏维度}
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/gcn_hidden_dim_runtime.pdf}
+        \caption{GCN隐藏维度}
+        \label{fig:subfig1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/gin_hidden_dim_runtime.pdf}
+        \caption{GIN隐藏维度}
+        \label{fig:subfig2}
+    \end{subfigure}
+    \caption{隐藏维度与延迟的关系}
+    \label{fig:Hidden Dimension}
+\end{figure}
+隐藏维度（hidden dimension）是 GNN 中用于表示节点特征的向量空间大小，它直接影响每一层神经网络的参数数量和计算复杂度。在本项实验中，我们重点分析了 GNN 架构中隐藏维度大小对两种主流模型——GCN 和 GIN——运行性能的影响。如图~\ref{fig:Hidden Dimension}所示，随着隐藏维度的增加，两种模型的运行时间均有所上升。这一趋势主要源于更大的隐藏维度带来了更多的计算和内存操作。在 GCN 中，聚合阶段会涉及更多的加法运算和数据移动操作，节点更新阶段的嵌入矩阵尺寸也随之扩大，从而增加了整体计算负担。
+
+值得注意的是，GIN 的运行时间增长幅度远高于 GCN。这是因为 GIN 模型本身具有更深的网络结构（5 层），相比之下 GCN 仅为 2 层，导致隐藏维度带来的开销在 GIN 中呈线性甚至更高阶的叠加效应。此外，由于 ，GCN节点维度缩减（DGEMM）总是在聚合之前进行，这大大减少了聚合阶段的数据移动和线程同步开销。GIN 的聚合操作设计更复杂，在每一层的计算密度和内存访问强度都高于 GCN，因此在隐藏维度扩大时其性能退化更为明显。
+
+\subsubsection{开销分析}
+在 ~\Mname{}中，使用社区感知的节点重新编号来优化图的局部性，进而提升 GNN 的性能。尽管我们选用了轻量级的重新编号算法，但仍然需要在读取图后进行一次性预处理。为了评估这一开销对整体性能的影响，我们使用 GCN 模型对III 型图在训练阶段的性能开销进行了深入分析。III 型图的节点和边的数量，节点重编号的开销较大，同时结构高度不规则，容易从节点重编号中收益。图~\ref{fig:reorder-overhead}展示了训练过程中的重编号开销比例。可以看到，节点重新编号阶段的开销仅最高占训练时间的 1.52\%，平均仅占1.14\%。这一处理过程所带来的时间成本非常小，完全可以在训练或推理的运行时周期中进行摊销，从而避免对整体性能产生显著影响。
+
+结合上一节的优化分析我们可以发现，这种一次性预处理策略不仅代价低，而且带来了显著的下游性能提升。通过对图结构的重组优化了图中节点的访问局部性，从而增强了后续计算过程中缓存命中率和数据传输效率。因此，社区感知的节点重新编号不仅在理论上具备可行性，在实践中也被验证为高效且轻量的优化方案。
+\subsubsection{参数选择}
+
+为了展示~\Mname{}中的轻量级分析模型\textbf{Decider}在内核参数选择中的有效性，我们在不同的数据集上进行了实验。我们选择了两个具有代表性的图数据集：\textit{amazon0505} 和 \textit{soc-BlogCatalog}。实验结果如图~\ref{fig: parameter selection}所示，\textbf{Decider}的参数选择策略能够为上述四种设置精确地找到最优的低延迟设计。这证明了我们的分析模型在辅助参数选择以优化 GNN 计算性能方面的有效性。
+
+\begin{figure}[htbp] 
+    \centering
+    \includegraphics[width=0.9\linewidth]{images/paramer-2.pdf} 
+    \caption{\textbf{Decider}的参数选择有效性验证，左侧为\textit{amazon0505}数据集，右侧为\textit{soc-BlogCatalog}数据集}
+    \label{fig: parameter selection}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
+    \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
+\end{figure} 
 \subsection{本章小结}
+本章对~\Mname{}在多种GNN模型和三类图数据集上的推理与训练性能进行了系统评估。实验结果表明，\Mname{}在推理任务中相较于DGL平均加速可达$3.13\times$（GCN）和$1.35\times$（GIN），在训练任务中也实现了最高$2.00\times$的性能提升。这样的性能优势得益于\Mname{}基于图结构特征的任务划分策略和高效的内存优化机制，尤其在大规模、结构不规则的图上依然展现出显著效果。同时，我们还对~\Mname{}的预处理开销、参数选择等进行了深入分析，验证了其在实际应用中的有效性和通用性。
 
 
-
-
-% \subsection{与其他框架的比较}
-% \subsubsection{与 DGL 的比较} \label{sect: compared with DGL}
-% \begin{figure}[htbp] 
-%     \centering
-%     \includegraphics[width=0.9\linewidth]{images/dgl-speedup.pdf} 
-%     \caption{Inference speedup ($\times$) over DGL on GCN and GIN.}
-%     \label{fig: Speedup vs DGL.}
-% \end{figure}
-% 在本节中，我们首先在 GNN 推理方面与 DGL 进行了详细的实验分析和比较，然后将比较扩展到 GNN 训练。
-% 如图~\ref{fig: Speedup vs DGL.} 所示，在 GCN 和 GIN 的推理任务上，针对三种类型的数据集，~\Mname{} 相较于 DGL~\cite{wang2019dgl} 分别平均取得了 todo 和 todo 的加速比。
-% % Especially, on the challenging type III dataset, ~\Mname{}can still achieve an average $1.93\times$ speedup GCN and average $1.58\times$ speedup on GIN.
-% % % 特别是，在具有挑战性的 III 型数据集上，\Mname 在 GCN 上仍能实现平均 1.93 倍的加速，在 GIN 上平均实现 1.58 倍的加速。
-% % % It is because ~\Mname{}can fully leverage the input-level information, such as node degree, to guide system-level optimizations. %(\textit{e.g.}, group-based workload partitioning).  %thus maximizing the performance benefits on GPUs.
-% % % % 这是因为 \Mname 可以充分利用输入层面的信息（例如节点度）来指导系统级优化（例如，基于组的工作负载划分），从而最大化 GPU 上的性能优势。
-% % However, DGL only applies a set of generic optimizations without effectively using the input properties.
-% % % % 然而，DGL 仅应用一组通用优化，而没有有效地利用输入属性。
-% % We next provide detailed analysis for each type of datasets and give insights into the benefits based on low-level GPU kernel metrics.
-% % % 我们接下来将对每种类型的数据集进行详细分析，并根据底层 GPU 核函数度量提供对其优势的见解。
-% 接下来，我们将提供详细的分析，并针对每种类型的数据集给出见解。
-
-% \textbf{I 型图:}
-% 相较于 DGL，GCN 的性能提升（todo）显著高于 GIN（todo）。
-% 主要原因是它们不同的 GNN 计算模式。
-% 对于 GCN，节点维度缩减 (DGEMM) 总是在聚合操作之前进行。由于节点维度显著降低，这极大地减少了聚合阶段的数据移动和线程同步开销，
-% %due to the significantly decreased node dimension, (原文注释：因为节点维度显著降低)
-% 使得 GCN 可以从 ~\Mname{} 的二维工作负载管理和旨在改善数据局部性的专用内存优化中获得更多益处。另一方面，GIN 的聚合阶段必须节点维度缩减之前完成。因此，它无法避免在聚合阶段进行大量的内存访问和数据移动。因此，它从数据局部性以及用于快速且低开销内访问的 GPU 共享内存中获得的益处较少。然而，我们的细粒度维度划分仍然可以有效地处理这些高维情况。
-% \begin{figure} [htbp]
-%     \centering
-%     \includegraphics[width=0.9\linewidth]{images/GCN-training.pdf}
-%     \caption{Training speedup ($\times$) over DGL on GCN and GIN.}
-%     \label{fig: GCN Training Performance Comparison with DGL.}
-% \end{figure}
-
-% \textbf{II 型图:}
-% 在相同数据集上，GCN (todo 倍) 和 GIN (todo 倍) 之间的性能差异相对较小，除了 \textit{TWITTER-Partial} 数据集，该数据集在类型二图中拥有最高的节点嵌入维度 (1323)。值得注意的是，与类型一图相比，GIN 的加速比始终更好。这主要有两个原因：1) 类型二图的节点特征维度（平均 66.5，不包括 \textit{TWITTER-Partial}）远低于类型一图（平均 1421），这使得它们能从我们专用内存优化所带来的数据空间和时间局部性中获得更多性能益处；2) 类型二图本身在图结构上就具有良好的局部性。原因是类型二数据集由多个小图组成，这些小图内部连接非常密集，但图与图之间没有边连接，并且每个小图内的节点都被分配了连续的 ID。因此，当这种图结构局部性与 ~\Mname{} 高效的工作负载和内存优化相结合时，其带来的性能增益可以得到放大。
-
-% \textbf{III 型图:}
-% 在节点和边数量庞大的图（例如 \textit{amazon0505}）上，加速比同样显著（GCN 平均 todo 倍，GIN 平均 todo 倍）。原因是高开销的线程间同步和全局内存访问可以通过我们的二维工作负载管理和专用内存优化得到很好的降低。
-% % with significant performance tuning flexibility. % （原文注释：具有显著的性能调优灵活性。）
-% 此外，我们的社区感知节点重编号通过改善数据的空间/时间局部性，进一步促进了相邻线程（处理一组节点）之间的高效工作负载共享。
-% % In contrast, DGL only relies on simple and generic GPU kernel optimizations, while lacking an effective way to utilize the input-level information for performance improvement, thus suffering from inferior performance. % （原文注释：相比之下，DGL 仅依赖简单通用的 GPU 核函数优化，缺乏有效利用输入层信息来提升性能的方法，因此性能较差。）
-% 在类型三中节点和边数量最少的数据集 \textit{artist} 上，我们注意到 GIN 的性能加速比较低。我们发现 \textit{artist} 数据集在类型三图中具有最高的图社区大小标准差，这使得以下两点变得具有挑战性：1) 利用组社区信息在 GNN 聚合阶段捕获节点的时空局部性，以及 2) 利用这种社区结构来指导系统级优化（例如，基于 Warp 的线程对齐和共享内存定制化）以在 GPU 上获取性能优势，因为 GPU 在每个块/SM 中具有固定数量的计算和内存单元。
-% % in general. % （原文注释：通常而言。）
-
-% \textbf{核函数度量 (Kernel Metrics):}
-% 为了进行详细的核函数度量分析，我们利用 Nsight Compute~\cite{ncu} 来测量两个对性能至关重要的（计算和内存）CUDA 核函数度量指标：\textit{流式多处理器 (SM) 效率} 和 \textit{缓存 (L1 + L2 + 纹理) 命中率}。
-% %
-% 相较于 DGL，~\Mname{}在 GCN 和 GIN 上分别实现了平均 $todo$ 和 $todo$ 的更高 SM 效率，这表明我们的二维工作负载管理能够在单线程效率和多线程并行性之间取得良好平衡，这对整体性能提升至关重要。
-% 相应地，相较于 DGL，~\Mname{}在 GCN 和 GIN 上分别实现了平均 $75.55\%$ 和 $126.20\%$ 的更高缓存命中率，这展示了专用内存优化的好处。
-
-% \vspace{-10pt}
-% \textbf{训练支持 (Training Support):}
-% 我们还在所有三种类型的数据集上评估了 ~\Mname{} 相对于 DGL 在 GCN 和 GIN 上的训练性能。
-% 与推理相比，训练更具挑战性，因为它涉及更密集的计算，包括前向值传播和反向梯度传播，这两者都严重依赖于底层的图聚合核函数进行计算。
-% 如图~\ref{fig: GCN Training Performance Comparison with DGL.}所示，~\Mname{} 始终优于 DGL 框架，在 GCN 和 GIN 上分别取得了平均 todo 和平均 todo 的加速比，这显示了我们输入驱动优化的优势。
-% % \todo{Q: Less training speedup:} % 问题：为何训练加速比较低？
-% % \fixed{
-% GNN 训练与推理的关键区别有两方面：首先，训练需要反向传播。这一步受益于我们的改进，因为反向传播步骤与推理期间的前向计算类似，所有提出的方法仍然有益；其次，训练会产生额外的内存和数据移动开销，用于存储/访问前向传播的激活值，直到梯度可以反向传播回来。
-% % This is the reason for lower training speedup. % 这就是训练加速比较低的原因。
-% % In contrast, in the inference, all such intermediate results can be thrown away immediately when the computation processes to the next layer. % 相比之下，在推理中，当计算进行到下一层时，所有这些中间结果都可以立即丢弃。
-% % }
-
-% \subsubsection{与 PyG 的比较}
-% % We choose the best setting of PyG: Type II datasets + graph mini-batching. Other settings are omitted due to inferior results. % 我们选择 PyG 的最佳设置：类型二数据集 + 图小批量处理。其他设置因结果较差而被省略。
-% % the comparison with PyG in end-to-end training since PyG has the most optimizations (\textit{e.g.}, ) for effectively processing such batched graphs with block-diagonal properties in their adjacent matrices. % 在端到端训练中与 PyG 进行比较，因为 PyG 具有最多的优化（例如，...）来有效处理邻接矩阵具有块对角属性的批处理图。
-% % For Type I and III datasets, we find that PyG cannot provide comparable performance compared with DGL and thus decide not to include the results here. % 对于类型一和类型三数据集，我们发现 PyG 无法提供与 DGL 相当的性能，因此决定不在此处包含结果。
-% 如图~\ref{fig: Comparison with PyG.}所示，~\Mname{}的表现优于 PyG，在 GCN 和 GIN 上分别取得了平均 $todo$ 和 $todo$ 的加速比。对于 GCN，~\Mname{}在具有高维节点嵌入的数据集（例如 \textit{TWITTER-Partial}）上实现了显著的加速，这得益于：1) 在聚合前进行节点维度缩减；以及 2) 通过邻居划分和维度划分实现工作负载共享。对于 GIN，~\Mname{}在平均度较高的数据集（例如 \textit{DD}）上达到了 $todo$ 的加速比，因为 ~\Mname{}能够有效地将每个节点的工作负载沿着其嵌入维度分发给工作线程，同时兼顾了单线程效率和线程间并行性。相比之下，PyG 的性能较差，原因在于：1) 其在平衡工作负载和控制同步开销方面的线程管理策略效率不高；2) 它严重依赖灵活性不足的 scatter-and-gather 核函数。
-% \begin{figure}[t]
-%     \centering
-%     % \vspace{-5pt}
-%     \includegraphics[width=0.9\linewidth]{images/pyg-gcn-gin.pdf}
-%     \caption{在 GCN 和 GIN 上相对于 PyG 的训练加速比 ($\times$)。}
-%     \label{fig: Comparison with PyG.}
-% \end{figure}
-
-% \subsection{优化分析}
-% \label{sect: Optimization Analysis}
-% % \vspace{-5pt}
-% 在本节中，我们详细探讨并分析第~\ref{sect: 2D Workload Management}节和第~\ref{sect: Specialized Memory Optimization}节中使用的优化方法。
-% % the advantage of 2D workload of ~\Mname{}by exploring the impact of \textit{neighbor-group}, \textit{thread-per-block}, and \textit{dimension-worker} on GCN performance.
-% % % 通过探索邻居组、每块线程数和维度工作线程对 GCN 性能的影响，来探讨 \Mname 的二维工作负载的优势。
-% % compute efficiency (SM efficiency + atomic transactions), and memory performance (cache hit ratio, and memory throughput)
-% % % 计算效率（SM 效率 + 原子事务）和内存性能（缓存命中率、内存吞吐量）
-% % \begin{figure} [h] \small
-% %     \centering
-% %     \includegraphics[width=0.9\columnwidth]{imgs/group-size-study.pdf}
-% %     \caption{Group Size Impact. \small{Note: we normalize the runtime of other group size settings \textit{w.r.t.} the group size=1 setting ($100\%$).}}
-% %     % % 组大小的影响。注：我们将其他组大小设置的运行时相对于组大小=1的设置进行了归一化（100%）。
-% %     \vspace{-10pt}
-% %     \label{fig: Group-size Vs. Performance.}
-% % \end{figure}
-
-% % \begin{figure*}[h] \small
-% %     \centering
-% %     \subfloat[]{\includegraphics[width=0.33\textwidth]{imgs/node-reordering-speedup.pdf}}
-% %     \subfloat[]{\includegraphics[width=0.5\textwidth, trim=0 -0.5cm 0 0 ]{imgs/node-reordering-metrics.pdf}}
-% %     \subfloat[]{\includegraphics[width=0.33\textwidth, trim=1cm 1.2cm 0 1cm]{imgs/block-based-memory.pdf}}
-% %     % \vspace{-10pt}
-% %     \caption{Group-based Workload Impact on Performance (a) Group Size, (b) Thread-per-block, and (c) Dimension worker.}
-% %     % % 基于组的工作负载对性能的影响 (a) 组大小，(b) 每块线程数，(c) 维度工作线程。
-% %     % \vspace{-12pt}
-% %     \label{fig: Detailed GPU Metrics Comparison with DGL.}
-% % \end{figure*}
-
-% %\noindent
-% % \vspace{1pt}
-% \textbf{邻居划分 (Neighbor partitioning):}
-% 从图todo可以看出，随着邻居组大小的增加，~\Mname{}的运行时间会先下降。邻居组大小的增加可以充分利用每个线程的计算能力，同时提高了数据局部性并减少了原子操作的数量（即线程间同步开销）。然而，当邻居组大小超过某个阈值（例如，对于 \textit{artist} 数据集是 32）时，每个线程达到了其计算能力的上限，进一步增加邻居组大小不再带来性能提升，反而会增加整体延迟。
-
-% \textbf{维度划分 (Dimension partitioning):}
-% 如图todo所示，与邻居组大小相比，维度工作线程数量在 1 到 16 的范围内对性能的影响更为明显。
-% 当维度工作线程数量从 16 增加到 32 时，由于单工作线程效率和多工作线程并行性已经达到平衡，运行时间性能差异非常小。因此，进一步增加维度工作线程数量不再带来更多好处。
-% % of Type III datasets could reach its optimal, which can balance the single-worker efficiency and the multi-worker parallelism. % （原文片段：类型三数据集可以达到其最优值，这可以平衡单工作线程效率和多工作线程并行性。）
-% % The even larger size of dimension worker lets some launched threads get fewer dimensions to work on. % （原文片段：更大的维度工作线程数量让一些启动的线程分配到更少的维度进行工作。）
-% % The overall performance decreases due to the thread under-utilization. % （原文片段：由于线程利用率不足，整体性能下降。）
-% \begin{figure}[htbp] \small
-%     \vspace{-8pt}
-%     \subfloat[]{\includegraphics[width=0.48\linewidth, height=2.4cm, trim=0 0.3cm 0 0]{images/dimension-gcn.pdf}} 
-%     \hfill % 添加水平间距
-%     \subfloat[]{\includegraphics[width=0.48\linewidth, height=2.4cm, trim=0 -0.1cm 0 -0.1cm]{images/reordering-overhead.pdf}} 
-%     \vspace{-10pt}
-%     \caption{(a) Dimension comparison for GCN; (b) Reordering overhead.}
-%     \label{fig: Additional Studies.}
-% \end{figure}
-
-
-
-% \textbf{节点重编号 (Node renumbering):}
-% 我们通过对类型三数据集上的 GCN 和 GIN 进行性能剖析，展示了节点重编号的好处。如图todo所示，对图中的节点进行重编号可以分别为 GCN 和 GIN 带来高达 $todo$ 和 $todo$ 的加速比。主要原因是我们的社区感知节点重编号能够增加 GNN 聚合过程中的数据空间和时间局部性。
-
-% 为了量化这种局部性带来的好处，我们提取了详细的 GPU 核函数度量指标——以从 DRAM 读取和写入的字节数表示的内存访问量，来进行说明。
-% 我们的 CUDA 核函数度量剖析结果显示，节点重编号可以有效地减少运行时的内存访问开销（GCN 平均减少 todo\%，GIN 平均减少 todo\%），因为更多加载的节点嵌入更有可能在具有连续 ID 的节点之间共享。
-% 我们也注意到一个从我们的优化中受益较少的输入案例——\textit{artist}，因为：1) \textit{artist} 内部的社区大小呈现出很大的变异性（标准差高），这使得捕获邻接关系和局部性变得困难；2) 这种变异性阻碍了系统级（计算和内存）优化有效地利用重编号带来的局部性优势。
-
-% \textbf{块级优化 (Block-level optimization):}
-% 我们展示了我们的块级优化（包括基于 Warp 的线程对齐和 Warp 感知的共享内存定制化）带来的优化效益。
-% 我们分析了两个核函数度量（\textit{原子操作减少量}和\textit{DRAM 访问减少量}）在三个大图上的情况作为示例。
-% 如图 todo 所示，~\Mname{}可以有效地将原子操作和 DRAM 内存访问分别平均减少 todo 和 todo。
-% 这个结果表明：
-% 1) 基于邻居划分的 Warp 对齐线程映射能够有效减少大部分原子操作；
-% 2) Warp 感知的共享内存定制化能够避免大量的全局内存访问。
-
-% \vspace{-6pt}
-% \subsection{附加研究}
-% \label{sect: Additional Studies}
-% \hspace{5pt} \textbf{GNN 的隐藏维度 (Hidden dimensions of GNN):}
-% 在本实验中，我们分析了 GNN 架构中隐藏维度大小对 GCN 和 GIN 的影响。
-% 如图todo 所示，我们观察到随着 GCN 隐藏维度的增加，~\Mname{}的运行时间也随之增加，这是因为聚合阶段需要更多的计算（例如，加法）和内存操作（例如，数据移动），以及节点更新阶段节点嵌入矩阵的尺寸更大。
-% 同时，我们也注意到 GIN 相对于 GCN 显示出更大的延迟增长，这主要是因为层数不同（2 层 GCN 对比 5 层 GIN）使得这种差异更加显著。
-
-% \textbf{开销分析 (Overhead analysis):}
-% 社区感知节点重编号是利用 GNN 输入信息产生开销的主要来源，其他部分的开销可以忽略不计。
-% 这里作为一个案例研究，我们根据 ~\Mname{}\textbf{Decider} 给出的优化决策（如第~\ref{sect: Specialized Memory Optimization}节所讨论），评估了它在类型三图上 GCN 训练阶段的开销。
-% 这里我们使用训练作为示例；在真实的 GNN 应用场景中，推理过程也会使用相同的图结构很多次~\cite{SageConv, GCNConv, GCNConv}，只是输入不同的节点嵌入。
-% 如图todo所示，与整体训练时间相比，节点重编号的开销始终很小（平均 4.00\%）。
-% % TODO in GNN both training and inference would use the same graph structure many times~\cite{SageConv, GCNConv, GCNConv} while only changing the node embeddings input, therefore, we use training for illustration. % （原文注释：注意，在 GNN 中，训练和推理都会多次使用相同的图结构，仅改变节点嵌入输入，因此我们使用训练作为示例。）
-% 因此我们得出结论，这种一次性开销可以在 GNN 的运行时间内被分摊，这证明了它在实际 GNN 应用中的适用性。
-
-% \begin{figure} [t] \small
-%     \centering
-%     \includegraphics[width=\columnwidth]{images/analytical-modeling-1.pdf}
-%     \vspace{-10pt}
-%     \caption{四种设置的参数选择。注意，黑色实心点表示由 ~\Mname{}\textbf{Decider} 基于分析模型选择的参数 ($\mathit{dw}$ 和 $\mathit{ngs}$)。}
-%     \vspace{-15pt}
-%     \label{fig: Parameter Selection for Four Settings}
-% \end{figure}
-
-% \textbf{参数选择 (Parameter selection):}
-% 为了展示我们分析模型在核函数参数选择方面的有效性，我们考虑了四种不同的设置：
-% I: 以 \textit{amazon0505} 在 P6000 GPU 上的 GCN 作为我们的基准设置；
-% II: \textit{amazon0505} GCN 在 V100 上，以展示设备适应性；
-% III: \textit{amazon0505} 和 \textit{soc-BlogCatalog} 在 P6000 上，以展示对不同数据集的适应性；
-% IV: \textit{amazon0505} 在 P6000 上的 GIN，以展示对不同 GNN 模型架构的适应性。
-% 如图~\ref{fig: Parameter Selection for Four Settings}所示，我们的参数选择策略能够为上述四种设置精确地找到最优的低延迟设计。
-% 这证明了我们的分析模型在辅助参数选择以优化 GNN 计算性能方面的有效性。

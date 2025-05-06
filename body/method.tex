@@ -94,9 +94,10 @@ GNN 与传统图算法的区别在于其对节点嵌入的计算。
 其次，它引入了另一个与性能相关的参数——用于设计定制的工作线程数量（\textbf{维度工作线程} ($dw$)）。该参数的值有助于平衡线程级并行性和单线程效率（即每个线程的计算工作负载）。
 \begin{figure} [t] \small
     \centering
-    \includegraphics[width=\columnwidth]{images/dimension-sharing.pdf}
+    \includegraphics[width=0.9\columnwidth]{images/dimension-sharing.pdf}
     \caption{维度划分。$\bigoplus$：累加。}
-    \vspace{-15pt}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
+    \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
     \label{fig: Dimension-based Workload Sharing.}
 \end{figure}
 
@@ -165,11 +166,11 @@ GNN 与传统图算法的区别在于其对节点嵌入的计算。
 因此，与连续线程映射（图~\ref{fig: warp-based Thread Alignment}）相比，Warp 对齐的线程映射可以将来自同一个 Warp 的内存请求合并为一个全局内存事务（图~\ref{fig: warp-based Thread Alignment}）。
 \begin{figure} [t] \small
     \centering
-    \includegraphics[width=\columnwidth]{images/warp-alignment.pdf}
-    \vspace{-15pt}
+    \includegraphics[width=0.9\columnwidth]{images/warp-alignment.pdf}
     \caption{基于 Warp 的线程对齐。}
-    \vspace{-15pt}
     \label{fig: warp-based Thread Alignment}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
+    \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
 \end{figure}
 \subsection{专用内存优化}
 % \vspace{-15pt}
@@ -208,11 +209,11 @@ GNN 与传统图算法的区别在于其对节点嵌入的计算。
 我们对大量图进行的性能剖析也表明，当 $\sqrt{AES} > \lfloor\frac{\sqrt{\#N}}{100}\rfloor$ 时，节点重编号更有可能提高运行时性能。
 \begin{figure}[htbp] % 使用 figure 环境适应单栏排版
     \centering
-    \includegraphics[width=0.6\textwidth]{images/node-renumbering.pdf} % 调整宽度为单栏的合适比例
-    \vspace{-2pt} % 根据需要调整垂直间距
+    \includegraphics[width=0.8\textwidth]{images/node-renumbering.pdf} % 调整宽度为单栏的合适比例
     \caption{图边连接模式。注意，每个彩色方块代表两个节点之间的边。(a) 中的不同颜色代表来自不同社区的边。红色虚线框表示子社区。}
     \label{fig: node-renumbering} % 修改标签以符合 LaTeX 的命名规范
-    \vspace{-10pt}
+    \setlength{\abovecaptionskip}{0.4cm} %增大caption和图像之间的距离    
+    \setlength{\belowcaptionskip}{-0.4cm} %缩小caption和下方文字的距离
 \end{figure}
 
 \textbf{如何应用：}
@@ -246,7 +247,7 @@ Rabbit Reordering 已经被证明在捕获的图社区质量（数据局部性�
 \begin{algorithm}[htbp]
     \caption{Warp 感知的内存定制化}
     \label{alg: memory-organization}
-    \begin{algorithmic}[1] \small
+    \begin{algorithmic}[1]
         \Require 邻居组大小 $\mathit{ngs}$，线程块线程数 $\mathit{threadPerBlock}$，每 Warp 线程数 $\mathit{threadPerWarp}$
         \Ensure Warp 指针数组 $\mathit{warpPtr}$
         \State $\mathit{warpNum} \gets \textbf{computeGroups}(\mathit{ngs})$ \Comment{计算邻居组数量（即 Warp 数量）}

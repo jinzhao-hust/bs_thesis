@@ -1,0 +1,5 @@
+dataset, False, True
+citeseer, 1.288, 1.257
+cora, 1.112, 1.091
+pubmed, 1.883, 1.760
+ppi, 9.288, 9.070

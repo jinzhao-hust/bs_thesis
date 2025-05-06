@@ -19,67 +19,6 @@
 
 \refsection{0}
   \datalist[entry]{none/global//global/global}
-    \entry{张立先2011数控机床高速微线段插补算法与自适应前瞻处理}{article}{}
-      \name{author}{4}{}{%
-        {{hash=9240acf3eafe486c059aa6558bfc0aed}{%
-           family={张立先},
-           familyi={张\bibinitperiod}}}%
-        {{hash=8c4ecb1225f11215d350bd895b6c42f8}{%
-           family={孙瑞勇},
-           familyi={孙\bibinitperiod}}}%
-        {{hash=257993f2d0415a6e0296976d9d1b8049}{%
-           family={高小山},
-           familyi={高\bibinitperiod}}}%
-        {{hash=8422e6fa2d2c53a88a8162f599865b4e}{%
-           family={李洪波},
-           familyi={李\bibinitperiod}}}%
-      }
-      \name{namea}{4}{}{%
-        {{hash=9240acf3eafe486c059aa6558bfc0aed}{%
-           family={张立先},
-           familyi={张\bibinitperiod}}}%
-        {{hash=8c4ecb1225f11215d350bd895b6c42f8}{%
-           family={孙瑞勇},
-           familyi={孙\bibinitperiod}}}%
-        {{hash=257993f2d0415a6e0296976d9d1b8049}{%
-           family={高小山},
-           familyi={高\bibinitperiod}}}%
-        {{hash=8422e6fa2d2c53a88a8162f599865b4e}{%
-           family={李洪波},
-           familyi={李\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {chinese}%
-      }
-      \strng{namehash}{c888bd007659ed889e5cf1ecf320284a}
-      \strng{fullhash}{b6d449f9c177d91fe0127f810718e618}
-      \strng{bibnamehash}{994629e36a871a0da55f0a953c1155d3}
-      \strng{authorbibnamehash}{994629e36a871a0da55f0a953c1155d3}
-      \strng{authornamehash}{c888bd007659ed889e5cf1ecf320284a}
-      \strng{authorfullhash}{b6d449f9c177d91fe0127f810718e618}
-      \strng{nameabibnamehash}{994629e36a871a0da55f0a953c1155d3}
-      \strng{nameanamehash}{c888bd007659ed889e5cf1ecf320284a}
-      \strng{nameafullhash}{b6d449f9c177d91fe0127f810718e618}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{中国科学：技术科学}
-      \field{langid}{english}
-      \field{languageid}{chinese}
-      \field{lansortorder}{1}
-      \field{number}{6}
-      \field{title}{数控机床高速微线段插补算法与自适应前瞻处理}
-      \field{usera}{J}
-      \field{userd}{chinese}
-      \field{userf}{chinese}
-      \field{volume}{41}
-      \field{year}{2011}
-      \field{dateera}{ce}
-      \field{pages}{16}
-      \range{pages}{1}
-      \keyw{张立先2011数控机床高速微线段插补算法与自适应前瞻处理}
-    \endentry
     \entry{grover2016node2vec}{inproceedings}{}
       \name{author}{2}{}{%
         {{hash=0e7ecffac4441691ff61e0b68d89cd33}{%
@@ -117,8 +56,8 @@
       \strng{nameabibnamehash}{f78ae7abf2608b5507c89d73eca50af5}
       \strng{nameanamehash}{58aa14734b6910a3df8e0ee71d9c65d0}
       \strng{nameafullhash}{f78ae7abf2608b5507c89d73eca50af5}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 22nd ACM international conference on Knowledge discovery and data mining (SIGKDD)}
@@ -180,8 +119,8 @@
       \strng{nameabibnamehash}{75e48cd19787d1c675c8307f806c80a1}
       \strng{nameanamehash}{42f913597cb4202ac7fbbeed7bad8273}
       \strng{nameafullhash}{75e48cd19787d1c675c8307f806c80a1}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{The 20th ACM International Conference on Knowledge Discovery and Data Mining (SIGKDD)}
@@ -254,8 +193,8 @@
       \strng{nameanamehash}{52e748acce52334a7a531ad1a4fc166b}
       \strng{nameafullhash}{0d0c8c216eb15e87d6ade7beb142a509}
       \field{extraname}{1}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{The 28th International Conference on Machine Learning (ICML)}
@@ -328,8 +267,8 @@
       \strng{nameanamehash}{52e748acce52334a7a531ad1a4fc166b}
       \strng{nameafullhash}{6aabe825041d55b1d329c1f679b289ef}
       \field{extraname}{2}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Ninth IEEE International Conference on Data Mining (ICDM)}
@@ -411,8 +350,8 @@
       \strng{nameabibnamehash}{499db3f5f99862a44be39739e2baf3e2}
       \strng{nameanamehash}{58ea40a8beb3fe5a082e25c590d2a4f2}
       \strng{nameafullhash}{4bfaa7643ff10aa279c31eb08f2942f1}
-      \field{sortinit}{4}
-      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 29th ACM SIGACT-SIGOPS Symposium on Principles of Distributed Computing (PODC)}
@@ -504,8 +443,8 @@
       \strng{nameabibnamehash}{3ffa8e40fe85cc41dc2dde874da26f26}
       \strng{nameanamehash}{80d788a5865f28448791e19f9fbd5e1c}
       \strng{nameafullhash}{7b582920318a2814dc000d3978eb2d98}
-      \field{sortinit}{5}
-      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{The VLDB Endowment}
@@ -558,8 +497,8 @@
       \strng{nameanamehash}{cc329238cbedbedc2ba4d457b2866dd7}
       \strng{nameafullhash}{4b5026928d4b187d2dfe9422a256bec9}
       \field{extraname}{1}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{ICLR Workshop on Representation Learning on Graphs and Manifolds (ICLR)}
@@ -772,8 +711,8 @@
       \strng{nameanamehash}{063f02df51131b80c25ac063b2ac78c9}
       \strng{nameafullhash}{54e893cbd18f5c3d392ccaf00b3efc57}
       \field{extraname}{1}
-      \field{sortinit}{6}
-      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{ICLR Workshop on Representation Learning on Graphs and Manifolds}
@@ -832,8 +771,8 @@
       \strng{nameanamehash}{cc329238cbedbedc2ba4d457b2866dd7}
       \strng{nameafullhash}{4b5026928d4b187d2dfe9422a256bec9}
       \field{extraname}{2}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{langid}{english}
@@ -877,8 +816,8 @@
       \strng{nameanamehash}{2a21e2561359ebf2fb2d634ee7837a8e}
       \strng{nameafullhash}{2a21e2561359ebf2fb2d634ee7837a8e}
       \field{extraname}{1}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{howpublished}{\url{developer.nvidia.com/cusparse}}
@@ -952,8 +891,8 @@
       \strng{nameabibnamehash}{ea3cb67e2061364e003781329fb28b18}
       \strng{nameanamehash}{b1470f07a39ccccfd82893790939097a}
       \strng{nameafullhash}{ea3cb67e2061364e003781329fb28b18}
-      \field{sortinit}{9}
-      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{Proceedings of the 35th International Conference on Machine Learning}
@@ -1020,8 +959,8 @@
       \strng{nameabibnamehash}{7832692116131b92998a2c779ab92654}
       \strng{nameanamehash}{f8a18b642ed33acec116bbf544113bf4}
       \strng{nameafullhash}{7832692116131b92998a2c779ab92654}
-      \field{sortinit}{1}
-      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{sortinit}{9}
+      \field{sortinithash}{0a5ebc79d83c96b6579069544c73c7d4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Advances in Neural Information Processing Systems}
@@ -1797,8 +1736,8 @@
       \strng{nameabibnamehash}{78d3ffe775563bd509dfd1b2150dab33}
       \strng{nameanamehash}{1932b2b00fa057a3c9a5d64058b75a52}
       \strng{nameafullhash}{78d3ffe775563bd509dfd1b2150dab33}
-      \field{sortinit}{2}
-      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{{SIAM} J. Sci. Comput.}
@@ -3348,8 +3287,8 @@
       \strng{nameabibnamehash}{57c48674c23f1abe8ee9cd10f659b42d}
       \strng{nameanamehash}{5cde9dc0a8331c74d9cf1f389a323172}
       \strng{nameafullhash}{f0e673103d81f49f1036b7d30d233b0d}
-      \field{sortinit}{3}
-      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{IEEE Transactions on Computers}
@@ -5608,8 +5547,8 @@
       \strng{nameabibnamehash}{2b197fa4f10e7bf183ae4afd9e5148d0}
       \strng{nameanamehash}{4fb7a5636db2e7c9854b91b2887aa340}
       \strng{nameafullhash}{b2f5a60d048a4a9c37505f875caaa373}
-      \field{sortinit}{7}
-      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{2016 IEEE International Parallel and Distributed Processing Symposium (IPDPS)}
@@ -6184,8 +6123,8 @@
       \strng{nameabibnamehash}{2b38a82ba73175f1892ed6c22415fe62}
       \strng{nameanamehash}{abe60498875b44b92d8ff87a690002b1}
       \strng{nameafullhash}{b0fad719b095f782c29c6cdc9701e9fb}
-      \field{sortinit}{8}
-      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{The 32nd International Conference on Neural Information Processing Systems (NeurIPS)}

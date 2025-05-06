@@ -1,0 +1,6 @@
+dataset, reorder, train
+amazon0505, 0.051, 5.756
+artist, 0.011,  0.778
+com-amazon, 0.02, 4.2678
+soc-BlogCatalog, 0.0196, 1.3386
+amazon0601, 0.083, 5.355
